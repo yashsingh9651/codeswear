@@ -1,11 +1,20 @@
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
+import { useDispatch} from 'react-redux';
+import {setUserDetails} from "../slices/counterSlice";
 const signin = () => {
+  const dispatch = useDispatch();
   const router = useRouter();
+  // ? disallowing to go to login page when logged in...
+  useEffect(() => {
+    if (localStorage.getItem('token')){
+      router.push('/');
+    }
+  }, [])
   // ? Template
   const data = {
     email: "",
@@ -24,6 +33,9 @@ const signin = () => {
       });
       let response = await res.json();
       if (response.success) {
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('name', response.name);
+        localStorage.setItem('email', response.email);
         toast.success("Logged in Successfully", {
           position: "top-left",
           autoClose: 5000,
@@ -37,7 +49,7 @@ const signin = () => {
         action.resetForm();
         setTimeout(() => {
           router.push("http://localhost:3000");
-        }, 1500);
+        }, 1000);
       } else {
         toast.error(response.error, {
           position: "top-left",
@@ -106,20 +118,6 @@ const signin = () => {
               </div>
             </div>
             <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 rounded border-gray-300 text-pink-600 focus:ring-pink-600"
-                />
-                <label
-                  for="remember-me"
-                  className="ml-2 block text-sm text-gray-900"
-                >
-                  Remember me
-                </label>
-              </div>
               <div className="text-sm">
                 <Link
                   href="/forgotPass"
@@ -142,9 +140,9 @@ const signin = () => {
                     aria-hidden="true"
                   >
                     <path
-                      fill-rule="evenodd"
+                      fillRule="evenodd"
                       d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z"
-                      clip-rule="evenodd"
+                      clipRule="evenodd"
                     />
                   </svg>
                 </span>

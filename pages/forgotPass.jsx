@@ -1,7 +1,14 @@
 import Link from 'next/link'
-import React from 'react'
-
+import { useRouter } from 'next/router'
+import React, { useEffect } from 'react'
 const forgotpass = () => {
+  // ? disallowing to go to Forgot Password page when logged in...
+  const router = useRouter();
+  useEffect(() => {
+    if (localStorage.getItem('token')){
+      router.push('/');
+    }
+  }, [])
   return (
     <>
     <div className="flex min-h-full items-center justify-center px-4 py-12 sm:px-6 lg:px-8">

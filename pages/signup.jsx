@@ -1,10 +1,18 @@
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import Schema from "@/schema";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from "next/router";
 const signup = () => {
+  const router = useRouter();
+  // ? disallowing to go to signup page when logged in...
+  useEffect(() => {
+    if (localStorage.getItem('token')){
+      router.push('/');
+    }
+  }, [])
   // ? Template
   const data = {
     name: "",
@@ -35,6 +43,9 @@ const signup = () => {
           progress: undefined,
           theme: "dark",
         });
+        setTimeout(() => {
+          router.push("http://localhost:3000/signin");
+        }, 1200);
         action.resetForm();
       }
       else{
