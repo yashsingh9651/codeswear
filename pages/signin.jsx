@@ -1,22 +1,21 @@
 import Link from "next/link";
 import React from "react";
 import { useFormik } from "formik";
-import Schema from "@/schema";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-const signup = () => {
+import { useRouter } from "next/router";
+const signin = () => {
+  const router = useRouter();
   // ? Template
   const data = {
-    name: "",
     email: "",
     password: "",
   };
   // ? Handeling Formik...
   const { values, handleChange, handleBlur, handleSubmit } = useFormik({
     initialValues: data,
-    validationSchema: Schema,
     onSubmit: async (values, action) => {
-      let res = await fetch("http://localhost:3000/api/signup", {
+      let res = await fetch("http://localhost:3000/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -25,7 +24,7 @@ const signup = () => {
       });
       let response = await res.json();
       if (response.success) {
-        toast.success('Signup Successfully', {
+        toast.success("Logged in Successfully", {
           position: "top-left",
           autoClose: 5000,
           hideProgressBar: false,
@@ -36,9 +35,10 @@ const signup = () => {
           theme: "dark",
         });
         action.resetForm();
-      }
-      else{
-        action.resetForm();
+        setTimeout(() => {
+          router.push("http://localhost:3000");
+        }, 1500);
+      } else {
         toast.error(response.error, {
           position: "top-left",
           autoClose: 5000,
@@ -55,24 +55,26 @@ const signup = () => {
   return (
     <>
       <div className="flex min-h-full items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
-        <ToastContainer/>
+        <ToastContainer />
         <div className="w-full max-w-md space-y-8">
           <div>
             <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-              Sign up to create your account
+              Sign in to your account
             </h2>
-            <p className="mt-2 text-center text-sm text-gray-600">
+            <p class="mt-2 text-center text-sm text-gray-600">
               <Link
-                href="/signin"
+                href="/signup"
                 className="font-medium text-pink-600 hover:text-pink-500"
               >
-                Already have an account ? Sign In
+                {" "}
+                Doesn't have an account ? Sign Up
               </Link>
             </p>
           </div>
           <form
             onSubmit={handleSubmit}
             className="mt-8 space-y-6"
+            action="#"
             method="POST"
           >
             <div className="-space-y-px rounded-md shadow-sm">
@@ -80,26 +82,13 @@ const signup = () => {
                 <input
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  value={values.name}
-                  name="name"
-                  type="text"
-                  autoComplete="name"
-                  required
-                  className="relative block w-full rounded-t-md border-0 p-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 outline-none placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-pink-600 sm:text-sm sm:leading-6"
-                  placeholder="Enter Your Name"
-                />
-              </div>
-              <div>
-                <input
-                  onChange={handleChange}
-                  onBlur={handleBlur}
                   value={values.email}
                   name="email"
                   type="email"
-                  autoComplete="email"
+                  autocomplete="email"
                   required
-                  className="relative block w-full border-0 p-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 outline-none placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-pink-600 sm:text-sm sm:leading-6"
-                  placeholder="Enter Your Email"
+                  className="relative block w-full rounded-t-md border-0 p-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 outline-none placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-pink-600 sm:text-sm sm:leading-6"
+                  placeholder="Email address"
                 />
               </div>
               <div>
@@ -109,11 +98,35 @@ const signup = () => {
                   value={values.password}
                   name="password"
                   type="password"
-                  autoComplete="current-password"
+                  autocomplete="current-password"
                   required
                   className="relative block w-full outline-none rounded-b-md border-0 p-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-pink-600 sm:text-sm sm:leading-6"
-                  placeholder="Enter Your Password"
+                  placeholder="Password"
                 />
+              </div>
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <input
+                  id="remember-me"
+                  name="remember-me"
+                  type="checkbox"
+                  className="h-4 w-4 rounded border-gray-300 text-pink-600 focus:ring-pink-600"
+                />
+                <label
+                  for="remember-me"
+                  className="ml-2 block text-sm text-gray-900"
+                >
+                  Remember me
+                </label>
+              </div>
+              <div className="text-sm">
+                <Link
+                  href="/forgotPass"
+                  className="font-medium text-pink-600 hover:text-pink-500"
+                >
+                  Forgot your password?
+                </Link>
               </div>
             </div>
             <div>
@@ -129,13 +142,13 @@ const signup = () => {
                     aria-hidden="true"
                   >
                     <path
-                      fillRule="evenodd"
+                      fill-rule="evenodd"
                       d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z"
-                      clipRule="evenodd"
+                      clip-rule="evenodd"
                     />
                   </svg>
                 </span>
-                Sign Up
+                Sign in
               </button>
             </div>
           </form>
@@ -145,4 +158,4 @@ const signup = () => {
   );
 };
 
-export default signup;
+export default signin;

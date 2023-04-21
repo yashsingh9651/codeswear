@@ -1,8 +1,10 @@
+import Product from '@/models/Product';
 import { createSlice } from '@reduxjs/toolkit';
 export const counterSlice = createSlice({
   name: 'counter',
   initialState: {
     value:0,
+    total:0,
     cart:false,
     cartContent:[{
       id:57958,
@@ -25,20 +27,26 @@ export const counterSlice = createSlice({
     incrementByAmount: (state, action) => {
       state.value += action.payload
     },
-    handleAddToCart:(state, action) => {
-      const cart = {
-        id:Math.floor(Math.random()*600),
-        name: 'Manually Added Product Using Add To Cart Button',
+    handleAddToCart: async (state, action) => {
+      const cartItem = {
+        id:Math.random(),
+        title:'Manually added roduct',
         price: action.payload,
         image:'https://m.media-amazon.com/images/I/51E41jiRUpL._AC_UL480_FMwebp_QL65_.jpg',
         quantity:1
       }
-      state.cartContent.push(cart);
+      state.cartContent.push(cartItem);
       localStorage.setItem('cartContent', JSON.stringify(state.cartContent));
     },
     deleteCartItem:(state,action)=>{
       const index = state.cartContent.findIndex((item)=>item.id === action.payload);
       state.cartContent.splice(index,1);
+    },subTotal:state=>{
+      let subT = 0;
+      state.cartContent.forEach(element => {
+        subT += (element.price*element.quantity);
+        state.total=subT;
+      });
     },
     incrementItem: (state,action) =>{
       const index = state.cartContent.findIndex((item)=>item.id === action.payload);
@@ -55,5 +63,5 @@ export const counterSlice = createSlice({
     },
   }
 })
-export const {handleCart,handleAddToCart,incrementItem,incrementByAmount,deleteCartItem,decrementItem} = counterSlice.actions;
+export const {handleCart,handleAddToCart,subTotal,incrementItem,incrementByAmount,deleteCartItem,decrementItem} = counterSlice.actions;
 export default counterSlice.reducer;
