@@ -17,7 +17,7 @@ const Navbar = ({user}) => {
     localStorage.removeItem('token');
     localStorage.removeItem('name');
     localStorage.removeItem('email');
-    router.push("http://localhost:3000/signin");
+    router.push(`${process.env.NEXT_PUBLIC_HOST}/signin`);
     toast.success("Logged Out Successfully", {
       position: "top-left",
       autoClose: 5000,
@@ -29,7 +29,7 @@ const Navbar = ({user}) => {
       theme: "dark",
     });
   }
-  const name = localStorage.getItem('name');
+  // const name = localStorage.getItem('name');
   return (
     <>
     <ToastContainer/>

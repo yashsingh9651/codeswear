@@ -31,6 +31,13 @@ export const deleteCartItem = createAsyncThunk("deleteCartItem", async (id) => {
   const cartProductItem = await res.json();
   return cartProductItem.cartItem;
 });
+// ?  Deleting All Product from Cart...
+export const deleteAllCartItem = createAsyncThunk("deleteAllCartItem", async () => {
+  await fetch("http://localhost:3000/api/deleteAllCartItem");
+  const res = await fetch("http://localhost:3000/api/getCartItem");
+  const cartProductItem = await res.json();
+  return cartProductItem.cartItem;
+});
 // ? Creating Slice...
 const apiCallSlice = createSlice({
   name: "apiCall",
@@ -68,6 +75,16 @@ const apiCallSlice = createSlice({
       });
     });
     builder.addCase(deleteCartItem.fulfilled, (state, action) => {
+      state.cartData = action.payload;
+      let subT = 0;
+      state.cartData.forEach((element) => {
+        subT += element.quantity * element.price;
+        state.subTotal = subT;
+      });
+      state.checkoutData=state.cartData
+      state.checkoutSubTotal=state.subTotal
+    });
+    builder.addCase(deleteAllCartItem.fulfilled, (state, action) => {
       state.cartData = action.payload;
       let subT = 0;
       state.cartData.forEach((element) => {

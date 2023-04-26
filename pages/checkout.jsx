@@ -3,12 +3,16 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { incrementItem, decrementItem } from "../slices/counterSlice";
 import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
-import { deleteCartItem } from "../slices/apiCallSlice";
-import Link from "next/link";
+import { deleteCartItem} from "../slices/apiCallSlice";
+import {load} from '@cashfreepayments/cashfree-js';
 const checkout = () => {
   const dispatch = useDispatch();
   const checkoutData = useSelector((state) => state.apiCall.checkoutData);
   const subTotal = useSelector((state) => state.apiCall.checkoutSubTotal);
+  // ? Initiating Payment...
+  const initiatePayment = async () => {
+    
+  }
   return (
     <>
       <h1 className="font-semibold text-2xl text-center underline underline-offset-2 mb-3">
@@ -22,7 +26,7 @@ const checkout = () => {
         <div className={`md:flex flex-wrap bg-pink-200 rounded-t`}>
           {/* Item Box */}
           {checkoutData.map((item) => (
-            <div key={item.id} className="flex gap-2 w-full px-3 pt-2 md:w-3/6">
+            <div key={item._id} className="flex gap-2 w-full px-3 pt-2 md:w-3/6">
               {/* Titele ,Price,Qty. Box */}
               <div className="w-3/5 flex flex-col justify-between">
                 <h1>{item.name}</h1>
@@ -65,11 +69,9 @@ const checkout = () => {
             <h1 className="font-medium text-xl pb-2 px-3 bg-pink-200 rounded-b">
               Subtotal &#8377;{subTotal}
             </h1>
-            <Link href={"/checkout"}>
-              <button className="w-full mt-2 text-white bg-pink-500 border-0 p-2 focus:outline-none hover:bg-pink-600 rounded text-lg">
+              <button onClick={initiatePayment} className="w-full mt-2 text-white bg-pink-500 border-0 p-2 focus:outline-none hover:bg-pink-600 rounded text-lg">
                 Proceed to Payment
               </button>
-            </Link>
           </>
         ) : (
           <h1 className="font-semibold text-xl">Your Shopping Cart is Empty</h1>

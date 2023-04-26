@@ -24,7 +24,7 @@ const signin = () => {
   const { values, handleChange, handleBlur, handleSubmit } = useFormik({
     initialValues: data,
     onSubmit: async (values, action) => {
-      let res = await fetch("http://localhost:3000/api/login", {
+      let res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -48,7 +48,7 @@ const signin = () => {
         });
         action.resetForm();
         setTimeout(() => {
-          router.push("http://localhost:3000");
+          router.push(`${process.env.NEXT_PUBLIC_HOST}`);
         }, 1000);
       } else {
         toast.error(response.error, {
@@ -73,7 +73,7 @@ const signin = () => {
             <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
               Sign in to your account
             </h2>
-            <p class="mt-2 text-center text-sm text-gray-600">
+            <p className="mt-2 text-center text-sm text-gray-600">
               <Link
                 href="/signup"
                 className="font-medium text-pink-600 hover:text-pink-500"

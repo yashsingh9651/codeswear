@@ -1,6 +1,2 @@
-module.exports = {
-  plugins: {
-    tailwindcss: {},
-    autoprefixer: {},
-  },
-}
+const plugins = [require("tailwindcss")];
+module.exports = {plugins:plugins};

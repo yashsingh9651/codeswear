@@ -9,8 +9,7 @@ const mugs = ({products}) => {
         <div className="container px-5 py-10 mx-auto">
           <div className="flex flex-wrap">
             {products.map((item) => (
-              <Link key={item._id} legacyBehavior href={`product/${item.slug}`}>
-                <div className="lg:w-1/5 md:w-1/2 md:p-4 p-1 w-3/6 cursor-pointer">
+                <div key={item._id} className="lg:w-1/5 md:w-1/2 md:p-4 p-1 w-3/6 ">
                   <a>
                     <img
                       alt="ecommerce"
@@ -22,13 +21,14 @@ const mugs = ({products}) => {
                     <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">
                       {item.category}
                     </h3>
+                    <Link href={`product/${item.slug}`}>
                     <h2 className="text-gray-900 title-font text-lg font-medium">
                       {item.title}
                     </h2>
+                    </Link>
                     <p className="mt-1">&#8377; {item.price}</p>
                   </div>
                 </div>
-              </Link>
             ))}
           </div>
         </div>
@@ -37,8 +37,7 @@ const mugs = ({products}) => {
   );
 };
 export async function getServerSideProps(context) {
-  const server = "127.0.0.1:27017";
-  await mongoose.connect(`mongodb://${server}/codeswear`);
+  await mongoose.connect(`mongodb://${process.env.MONGO_URI}/codeswear`);
   let products = await Product.find({ category: "mug" });
   return {
     props: { products: JSON.parse(JSON.stringify(products)) },

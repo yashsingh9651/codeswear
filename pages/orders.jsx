@@ -1,9 +1,9 @@
-import React from 'react'
-
+import React from 'react';
 const orders = () => {
   return (
-    <div>orders</div>
+    <section className="text-gray-600 body-font overflow-hidden">
+  Orders
+</section>
   )
 }
-
-export default orders
+export default orders;

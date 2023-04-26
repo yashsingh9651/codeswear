@@ -24,7 +24,7 @@ const signup = () => {
     initialValues: data,
     validationSchema: Schema,
     onSubmit: async (values, action) => {
-      let res = await fetch("http://localhost:3000/api/signup", {
+      let res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -44,7 +44,7 @@ const signup = () => {
           theme: "dark",
         });
         setTimeout(() => {
-          router.push("http://localhost:3000/signin");
+          router.push(`${process.env.NEXT_PUBLIC_HOST}/signin`);
         }, 1200);
         action.resetForm();
       }

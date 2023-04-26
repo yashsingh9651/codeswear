@@ -27,7 +27,7 @@ const Slug = ({ product, variants }) => {
   // ? Checking serviceablity
   const [pincode, setPincode] = useState();
   const checkService = async () => {
-    const codes = await fetch("http://localhost:3000/api/pincode");
+    const codes = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/pincode`);
     const codesJson = await codes.json();
     if (codesJson.includes(parseInt(pincode))) {
       toast.success("This Pincode is Serviceable", {
@@ -233,8 +233,7 @@ const Slug = ({ product, variants }) => {
   );
 };
 export async function getServerSideProps(context) {
-  const server = "127.0.0.1:27017";
-  await mongoose.connect(`mongodb://${server}/codeswear`);
+  await mongoose.connect(`mongodb://${process.env.MONGO_URI}/codeswear`);
   let getProduct = await Product.findOne({ slug: context.query.slug });
   let variants = await Product.find({ title: getProduct.title });
   let colorSizeSlug = {};
