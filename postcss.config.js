@@ -1,2 +1,7 @@
-const plugins = [require("tailwindcss")];
-module.exports = {plugins:plugins};
+module.exports = {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {},
+      ...(process.env.NODE_ENV === 'production' ? { cssnano: {} } : {})
+    }
+  }
